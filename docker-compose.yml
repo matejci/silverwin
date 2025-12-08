@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: silverwin_production
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+  web:
+    image: matejci/silverwin:latest
+    build: .
+    environment:
+      RAILS_ENV: development
+      SECRET_KEY_BASE: bf411a4cb29c85d77c7f95ed1e82e45ca2097bc165d49f0d64f4eaf449776711814800197930d2cb42489b9fcdf95045358017893b2c1003a49db91b4666a7ac
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/silverwin_production
+      REDIS_URL: redis://redis:6379/0
+      PORT: 3000
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3000:3000"
+    command: bundle exec puma -C config/puma.rb
+    user: root
+
+  sidekiq:
+    image: matejci/silverwin:latest
+    build: .
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: bf411a4cb29c85d77c7f95ed1e82e45ca2097bc165d49f0d64f4eaf449776711814800197930d2cb42489b9fcdf95045358017893b2c1003a49db91b4666a7ac
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/silverwin_production
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    command: bundle exec sidekiq
+
+volumes:
+  pg_data:
