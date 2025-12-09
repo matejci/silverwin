@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidekiq
+  namespace: silverwin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidekiq
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+    spec:
+      containers:
+        - name: sidekiq
+          image: matejci/silverwin:latest
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@postgres:5432/silverwin_production
+            - name: REDIS_URL
+              value: redis://redis:6379/0
+            - name: SECRET_KEY_BASE
+              value: bf411a4cb29c85d77c7f95ed1e82e45ca2097bc165d49f0d64f4eaf449776711814800197930d2cb42489b9fcdf95045358017893b2c1003a49db91b4666a7ac
+          command: ["bundle", "exec", "sidekiq"]
