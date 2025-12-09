@@ -1,29 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rails
+  name: silverwin
   namespace: silverwin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rails
+      app: silverwin
   template:
     metadata:
       labels:
-        app: rails
+        app: silverwin
     spec:
       containers:
-        - name: rails
+        - name: silverwin
           image: matejci/silverwin:latest
           env:
             - name: RAILS_ENV
               value: production
-            - name: DATABASE_URL
-              value: postgres://postgres:postgres@postgres:5432/silverwin_production
+            - name: POSTGRES_HOST
+              value: postgres
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: REDIS_URL
               value: redis://redis:6379/0
-            - name: SECRET_KEY_BASE
-              value: bf411a4cb29c85d77c7f95ed1e82e45ca2097bc165d49f0d64f4eaf449776711814800197930d2cb42489b9fcdf95045358017893b2c1003a49db91b4666a7ac
+            - name: RAILS_SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: rails-secret
+                  key: RAILS_SECRET_KEY_BASE
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rails-master-key
+                  key: RAILS_MASTER_KEY
           ports:
             - containerPort: 3000

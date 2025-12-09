@@ -4,9 +4,7 @@ metadata:
   name: redis
   namespace: silverwin
 spec:
-  type: ClusterIP
   selector:
     app: redis
   ports:
     - port: 6379
-      targetPort: 6379

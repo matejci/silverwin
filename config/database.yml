@@ -80,6 +80,8 @@ test:
 #
 production:
   <<: *default
-  database: personalgoaldemo_production
-  username: personalgoaldemo
-  password: <%= ENV["PERSONALGOALDEMO_DATABASE_PASSWORD"] %>
+  database: silverwin_production
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: <%= ENV['POSTGRES_HOST'] %>
+  port: 5432
