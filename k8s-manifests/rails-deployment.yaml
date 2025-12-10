@@ -16,7 +16,10 @@ spec:
       containers:
         - name: silverwin
           image: matejci/silverwin:latest
+          imagePullPolicy: Always
           env:
+            - name: SECRET_KEY_BASE
+              value: 5d38b8ade69fe20e180d21b72352841842c82ca2dfe55dad1562a5a901538f6c2f3b9d52c2e320e1f431996aa89f1cff9ad5b21658931c7ab72cbd7c8c0218f6
             - name: RAILS_ENV
               value: production
             - name: POSTGRES_HOST
@@ -33,15 +36,5 @@ spec:
                   key: POSTGRES_PASSWORD
             - name: REDIS_URL
               value: redis://redis:6379/0
-            - name: RAILS_SECRET_KEY_BASE
-              valueFrom:
-                secretKeyRef:
-                  name: rails-secret
-                  key: RAILS_SECRET_KEY_BASE
-            - name: RAILS_MASTER_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: rails-master-key
-                  key: RAILS_MASTER_KEY
           ports:
             - containerPort: 3000
