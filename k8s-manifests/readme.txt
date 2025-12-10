@@ -10,3 +10,8 @@ kubectl apply -f k8s-manifests/redis-service.yaml
 kubectl apply -f k8s-manifests/rails-deployment.yaml
 kubectl apply -f k8s-manifests/rails-service.yaml
 kubectl apply -f k8s-manifests/sidekiq-deployment.yaml
+
+Future work:
+============
+ - add PersistentVolumes for Postgres instead of emptyDir, so data survives pod restarts
+ - set HTTPS/SSL certs
