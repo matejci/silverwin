@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rails-migrate
+  namespace: silverwin
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: matejci/silverwin:latest
+        command: ["rails", "db:create", "db:migrate"]
+        env:
+        - name: RAILS_ENV
+          value: production
+        - name: POSTGRES_HOST
+          value: postgres
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: RAILS_SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: rails-secret
+              key: RAILS_SECRET_KEY_BASE
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rails-master-key
+              key: RAILS_MASTER_KEY
+      restartPolicy: Never

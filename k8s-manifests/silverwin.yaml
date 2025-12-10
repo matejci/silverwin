@@ -66,11 +66,6 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-            - name: RAILS_MASTER_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: rails-master-key
-                  key: RAILS_MASTER_KEY
           ports:
             - containerPort: 5432
           volumeMounts:
