@@ -57,5 +57,5 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 4.4"
-gem "sidekiq", "~> 8.0"
+gem "sidekiq", "~> 8.1"
 gem "redis", "~> 5.4"
